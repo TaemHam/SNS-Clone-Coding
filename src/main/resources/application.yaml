@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://svc.gksl2.cloudtype.app:30684/sns
+    username: users
+    password: UseRpw!@#
+    driver-class-name: org.postgresql.Driver
+    hikari.maximum-pool-size: 4
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
