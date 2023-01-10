@@ -18,3 +18,8 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
+
+jwt:
+  secret-key: sns-clone-coding-project.secret_key
+  # TODO: Refresh Token 구현
+  token.expired-time-ms: 3600000
