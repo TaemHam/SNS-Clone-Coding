@@ -20,7 +20,6 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 @Table(name = "\"post\"")
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE \"post\" SET deleted_at = NOW() where id=?")
 public class Post {
 
     @Id
@@ -54,5 +53,15 @@ public class Post {
     @PreUpdate
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
+    }
+
+    private Post(String title, String body, User user) {
+        this.title = title;
+        this.body = body;
+        this.user = user;
+    }
+
+    public static Post of(String title, String body, User user) {
+        return new Post(title, body, user);
     }
 }
