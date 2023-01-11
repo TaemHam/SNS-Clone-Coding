@@ -3,17 +3,22 @@ package com.practice.sns.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practice.sns.dto.PostDto;
+import com.practice.sns.dto.UserDto;
 import com.practice.sns.dto.request.PostCreateRequestDto;
 import com.practice.sns.dto.request.PostModifyRequestDto;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
 import com.practice.sns.service.PostService;
+import java.sql.Timestamp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -73,6 +78,9 @@ public class PostControllerTest {
         // Given
         String title = "title";
         String body = "body";
+        UserDto userDto = new UserDto(null, "name", null, null, null, null, null);
+        PostDto postDto = new PostDto(1L, "title", "body", userDto, null, null, null);
+        when(postService.modify(any(), any(), eq(title), eq(body))).thenReturn(postDto);
 
         // When & Then
         mockMvc.perform(put("/api/v1/posts/1")

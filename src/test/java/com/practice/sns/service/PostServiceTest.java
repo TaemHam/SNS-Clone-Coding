@@ -57,12 +57,14 @@ public class PostServiceTest {
     }
 
     @Test
-    void 포스트수정이_성공한_경우() {
+    void 포스트_수정이_성공한_경우() {
         // Given
         TestInfoFixture.TestInfo fixture = TestInfoFixture.get();
-        Post mockPost = mock(Post.class);
-        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.of(mock(User.class)));
-        when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.of(mockPost));
+        User user = User.of(fixture.getUserId(), fixture.getUserName(), fixture.getPassword());
+        Post post = Post.of(fixture.getPostId(), fixture.getTitle(), fixture.getBody(), user);
+        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.of(user));
+        when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.of(post));
+        when(postRepository.saveAndFlush(any())).thenReturn(post);
 
         // When & Then
         assertDoesNotThrow(() -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(), fixture.getBody()));
@@ -72,6 +74,7 @@ public class PostServiceTest {
     void 포스트_수정시_포스트가_존재하지_않는_경우() {
         // Given
         TestInfoFixture.TestInfo fixture = TestInfoFixture.get();
+        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.of(mock(User.class)));
         when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.empty());
 
         // When & Then
