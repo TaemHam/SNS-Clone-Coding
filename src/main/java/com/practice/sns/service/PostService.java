@@ -27,4 +27,19 @@ public class PostService {
         // 포스트를 저장한다
         postRepository.save(Post.of(title, body, user));
     }
+
+    @Transactional
+    public void modify(String userName, Long postId, String title, String body) {
+
+        // 유저를 찾는다
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND,
+                        String.format("User Name %s does not exist", userName)));
+
+        // 포스트를 찾는다
+
+        // 포스트 작성자를 확인한다
+
+        // 포스트를 저장한다
+    }
 }

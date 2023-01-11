@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -67,5 +69,9 @@ public class User {
 
     public static User of(String userName, String password) {
         return new User(userName, password);
+    }
+
+    public static User of(String userName) {
+        return new User(userName, null);
     }
 }
