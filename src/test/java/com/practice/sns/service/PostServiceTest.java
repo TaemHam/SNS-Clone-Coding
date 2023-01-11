@@ -11,6 +11,7 @@ import com.practice.sns.domain.Post;
 import com.practice.sns.domain.User;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
+import com.practice.sns.fixture.UserEntityFixture;
 import com.practice.sns.repository.PostRepository;
 import com.practice.sns.repository.UserRepository;
 import java.util.Optional;
@@ -27,34 +28,36 @@ public class PostServiceTest {
 
     @MockBean
     private PostRepository postRepository;
-    @Autowired
+    @MockBean
     private UserRepository userRepository;
 
     @Test
     void 포스트작성이_성공한_경우() {
         // Given
+        String userName = "name";
+        String password = "password";
         String title = "title";
         String body = "body";
-        String userName = "userName";
-        when(userRepository.findByUserName(userName)).thenReturn(Optional.of(mock(User.class)));
-        when(postRepository.save(any())).thenReturn(Optional.of(mock(Post.class)));
+        when(userRepository.findByUserName(userName)).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
+        when(postRepository.save(any())).thenReturn(mock(Post.class));
 
         // When & Then
-        assertDoesNotThrow(() -> postService.create(title, body, userName));
+        assertDoesNotThrow(() -> postService.create(userName, title, body));
     }
 
     @Test
     void 포스트작성시_요청한유저가_존재하지않는경우() {
         // Given
+        String userName = "name";
+        String password = "password";
         String title = "title";
         String body = "body";
-        String userName = "userName";
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
-        when(postRepository.save(any())).thenReturn(Optional.of(mock(Post.class)));
+        when(postRepository.save(any())).thenReturn(mock(Post.class));
 
         // When & Then
         SnsApplicationException e = assertThrows(SnsApplicationException.class,
-                () -> postService.create(title, body, userName));
-        assertEquals(ErrorCode.USER_NOT_FOUND, e.getMessage());
+                () -> postService.create(userName, title, body));
+        assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
     }
 }

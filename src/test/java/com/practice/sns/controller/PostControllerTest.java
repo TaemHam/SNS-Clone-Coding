@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -30,6 +31,7 @@ public class PostControllerTest {
     PostService postService;
 
     @Test
+    @WithMockUser
     void 포스트작성이_정상적으로_동작함() throws Exception {
         // Given
         String title = "title";
