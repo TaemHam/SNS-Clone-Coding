@@ -17,12 +17,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
 @Table(name = "\"post\"")
-@SQLDelete(sql = "UPDATE \"post\" SET deleted_at = NOW() where id=?")
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE \"post\" SET deleted_at = NOW() where id=?")
+@Where(clause = "deleted_at is NULL")
 public class Post {
 
     @Id
