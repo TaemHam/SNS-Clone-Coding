@@ -37,7 +37,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public Response<Void> modify(@PathVariable Long postId, Authentication authentication) {
+    public Response<Void> delete(@PathVariable Long postId, Authentication authentication) {
         postService.delete(authentication.getName(), postId);
         return Response.success();
     }
