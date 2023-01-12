@@ -95,7 +95,6 @@ public class PostServiceTest {
         assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
     }
 
-
     @Test
     void 포스트_수정시_포스트_작성자와_유저가_일치하지_않는_경우() {
         // Given
@@ -112,4 +111,58 @@ public class PostServiceTest {
         assertEquals(ErrorCode.INVALID_PERMISSION, exception.getErrorCode());
     }
 
+    @Test
+    void 포스트_삭제가_성공한_경우() {
+        // Given
+        TestInfoFixture.TestInfo fixture = TestInfoFixture.get();
+        User user = User.of(fixture.getUserId(), fixture.getUserName(), fixture.getPassword());
+        Post post = Post.of(fixture.getPostId(), fixture.getTitle(), fixture.getBody(), user);
+        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.of(user));
+        when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.of(post));
+
+        // When & Then
+        assertDoesNotThrow(() -> postService.delete(fixture.getUserName(), fixture.getPostId()));
+    }
+
+    @Test
+    void 포스트_삭제시_포스트가_존재하지_않는_경우() {
+        // Given
+        TestInfoFixture.TestInfo fixture = TestInfoFixture.get();
+        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.of(mock(User.class)));
+        when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.empty());
+
+        // When & Then
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () ->
+                postService.delete(fixture.getUserName(), fixture.getPostId()));
+        assertEquals(ErrorCode.POST_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    void 포스트_삭제시_유저가_존재하지_않는_경우() {
+        // Given
+        TestInfoFixture.TestInfo fixture = TestInfoFixture.get();
+        when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.of(mock(Post.class)));
+        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.empty());
+
+        // When & Then
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () -> postService.delete(fixture.getUserName(), fixture.getPostId()));
+        assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
+    }
+
+
+    @Test
+    void 포스트_삭제시_포스트_작성자와_유저가_일치하지_않는_경우() {
+        // Given
+        TestInfoFixture.TestInfo fixture = TestInfoFixture.get();
+        Post mockPost = mock(Post.class);
+        User mockUser = mock(User.class);
+        User mockUser2 = mock(User.class);
+        when(postRepository.findById(fixture.getPostId())).thenReturn(Optional.of(mockPost));
+        when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.of(mockUser));
+        when(mockPost.getUser()).thenReturn(mockUser2);
+
+        // When & Then
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () -> postService.delete(fixture.getUserName(), fixture.getPostId()));
+        assertEquals(ErrorCode.INVALID_PERMISSION, exception.getErrorCode());
+    }
 }
