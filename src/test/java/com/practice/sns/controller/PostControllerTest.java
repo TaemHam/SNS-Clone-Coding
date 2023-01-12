@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -154,4 +155,81 @@ public class PostControllerTest {
                 .andExpect(status().is(ErrorCode.DATABASE_ERROR.getStatus().value()));
     }
 
+    @Test
+    @WithMockUser
+    void 포스트삭제가_정상적으로_동작함() throws Exception {
+        // Given
+        UserDto userDto = new UserDto(null, "name", null, null, null, null, null);
+        PostDto postDto = new PostDto(1L, "title", "body", userDto, null, null, null);
+
+        // When & Then
+        mockMvc.perform(delete("/api/v1/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithAnonymousUser
+    void 포스트삭제시_로그인한상태가_아니라면_에러반환() throws Exception {
+        // Given
+        UserDto userDto = new UserDto(null, "name", null, null, null, null, null);
+        PostDto postDto = new PostDto(1L, "title", "body", userDto, null, null, null);
+
+        // When & Then
+        mockMvc.perform(delete("/api/v1/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().is(ErrorCode.INVALID_PERMISSION.getStatus().value()));
+    }
+
+    @Test
+    @WithMockUser
+    void 포스트삭제시_본인이_작성한_글이_아니라면_에러반환() throws Exception {
+        // Given
+        UserDto userDto = new UserDto(null, "name", null, null, null, null, null);
+        PostDto postDto = new PostDto(1L, "title", "body", userDto, null, null, null);
+        doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).delete(any(), any());
+
+        // When & Then
+        mockMvc.perform(delete("/api/v1/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().is(ErrorCode.INVALID_PERMISSION.getStatus().value()));
+    }
+
+    @Test
+    @WithMockUser
+    void 포스트삭제시_삭제하려는글이_없다면_에러반환() throws Exception {
+        // Given
+        UserDto userDto = new UserDto(null, "name", null, null, null, null, null);
+        PostDto postDto = new PostDto(1L, "title", "body", userDto, null, null, null);
+        doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).delete(any(), any());
+
+        // When & Then
+        mockMvc.perform(delete("/api/v1/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().is(ErrorCode.POST_NOT_FOUND.getStatus().value()));
+    }
+
+    @Test
+    @WithMockUser
+    void 포스트삭제시_데이터베이스_에러_발생시_에러반환() throws Exception {
+        // Given
+        UserDto userDto = new UserDto(null, "name", null, null, null, null, null);
+        PostDto postDto = new PostDto(1L, "title", "body", userDto, null, null, null);
+        doThrow(new SnsApplicationException(ErrorCode.DATABASE_ERROR)).when(postService).delete(any(), any());
+
+        // When & Then
+        mockMvc.perform(delete("/api/v1/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().is(ErrorCode.DATABASE_ERROR.getStatus().value()));
+    }
+
+
+
 }
+
+

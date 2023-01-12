@@ -52,4 +52,23 @@ public class PostService {
 
         return PostDto.from(postRepository.saveAndFlush(post));
     }
+
+    public void delete(String userName, Long postId) {
+
+        // 유저를 찾는다
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND,
+                        String.format("User Name %s does not exist", userName)));
+
+        // 포스트를 찾는다
+        Post post = postRepository.findById(postId).orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
+                String.format("Post ID %d does not exist", postId)));
+
+        // 포스트 작성자를 확인한다
+        if (!post.getUser().equals(user)) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("User Name %s has no permission to modify Post ID %d", userName, postId));
+        }
+
+        postRepository.delete(post);
+    }
 }
