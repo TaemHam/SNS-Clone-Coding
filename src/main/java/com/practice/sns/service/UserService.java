@@ -1,9 +1,9 @@
 package com.practice.sns.service;
 
+import com.practice.sns.domain.User;
+import com.practice.sns.dto.UserDto;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
-import com.practice.sns.dto.UserDto;
-import com.practice.sns.domain.User;
 import com.practice.sns.repository.UserRepository;
 import com.practice.sns.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +24,19 @@ public class UserService {
 
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMs;
+
+    public UserDto loadUserByUserName(String userName) {
+        return userRepository.findByUserName(userName).map(UserDto::from).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND,
+                        String.format("User Name %s does not exist", userName)));
+    }
+
     @Transactional
     public UserDto join(String userName, String password) {
         // userName 중복 체크
         userRepository.findByUserName(userName).ifPresent(it -> {
-            throw new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, String.format("User Name %s is duplicated", userName));
+            throw new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME,
+                    String.format("User Name %s is duplicated", userName));
         });
 
         // 회원가입 진행
@@ -38,10 +46,12 @@ public class UserService {
 
     public String login(String userName, String password) {
         // 회원가입 여부 체크
-        User user = userRepository.findByUserName(userName).orElseThrow(() -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("User Name %s does not exist", userName)));
+        User user = userRepository.findByUserName(userName).orElseThrow(
+                () -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND,
+                        String.format("User Name %s does not exist", userName)));
 
         // 비밀번호 체크
-        if(!encoder.matches(password, user.getPassword())) {
+        if (!encoder.matches(password, user.getPassword())) {
             throw new SnsApplicationException(ErrorCode.INVALID_PASSWORD);
         }
 

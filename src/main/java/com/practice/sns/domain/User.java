@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -60,12 +62,18 @@ public class User {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    private User(String userName, String password) {
+    private User(Long id, String userName, String password) {
+        this.id = id;
         this.userName = userName;
         this.password = password;
     }
 
     public static User of(String userName, String password) {
-        return new User(userName, password);
+        return new User(null, userName, password);
     }
+
+    public static User of(Long id, String userName, String password) {
+        return new User(id, userName, password);
+    }
+
 }
