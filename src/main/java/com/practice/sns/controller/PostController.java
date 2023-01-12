@@ -8,6 +8,7 @@ import com.practice.sns.dto.response.Response;
 import com.practice.sns.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,11 +29,16 @@ public class PostController {
         return Response.success();
     }
 
-
     @PutMapping("/{postId}")
     public Response<PostResponseDto> modify(@PathVariable Long postId, @RequestBody PostModifyRequestDto dto,
                                  Authentication authentication) {
         PostDto post = postService.modify(authentication.getName(), postId, dto.getTitle(), dto.getBody());
         return Response.success(PostResponseDto.from(post));
+    }
+
+    @DeleteMapping("/{postId}")
+    public Response<Void> modify(@PathVariable Long postId, Authentication authentication) {
+        postService.delete(authentication.getName(), postId);
+        return Response.success();
     }
 }
