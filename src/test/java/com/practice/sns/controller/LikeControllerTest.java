@@ -3,6 +3,7 @@ package com.practice.sns.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,10 +34,9 @@ public class LikeControllerTest {
     @WithMockUser
     void 좋아요기능이_정상적으로_동작함() throws Exception {
         // Given
-//        when(likeService.like(any(), any())).thenReturn();
 
         // When & Then
-        mockMvc.perform(get("/api/v1/posts/1/like")
+        mockMvc.perform(post("/api/v1/posts/1/like")
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().isOk());
@@ -46,10 +46,9 @@ public class LikeControllerTest {
     @WithAnonymousUser
     void 좋아요요청시_로그인_하지_않은경우_에러반환() throws Exception {
         // Given
-//        when(likeService.like(any(), any())).thenReturn();
 
         // When & Then
-        mockMvc.perform(get("/api/v1/posts/1/like")
+        mockMvc.perform(post("/api/v1/posts/1/like")
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().is(ErrorCode.INVALID_PERMISSION.getStatus().value()));
@@ -62,7 +61,7 @@ public class LikeControllerTest {
         doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(likeService).like(any(), any());
 
         // When & Then
-        mockMvc.perform(get("/api/v1/posts/1/like")
+        mockMvc.perform(post("/api/v1/posts/1/like")
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().is(ErrorCode.POST_NOT_FOUND.getStatus().value()));
