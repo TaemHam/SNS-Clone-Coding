@@ -7,9 +7,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.practice.sns.domain.User;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
-import com.practice.sns.domain.User;
 import com.practice.sns.fixture.UserEntityFixture;
 import com.practice.sns.repository.UserRepository;
 import java.util.Optional;
@@ -57,7 +57,8 @@ public class UserServiceTest {
         when(userRepository.save(any())).thenReturn(Optional.of(fixture));
 
         // When & Then
-        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> userService.join(userName, password));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class,
+                () -> userService.join(userName, password));
         assertEquals(ErrorCode.DUPLICATED_USER_NAME, e.getErrorCode());
     }
 
@@ -84,7 +85,8 @@ public class UserServiceTest {
         when(userRepository.findByUserName(userName)).thenReturn(Optional.empty());
 
         // When & Then
-        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> userService.login(userName, password));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class,
+                () -> userService.login(userName, password));
         assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
 
     }
@@ -101,7 +103,8 @@ public class UserServiceTest {
         when(userRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
 
         // When & Then
-        SnsApplicationException e = assertThrows(SnsApplicationException.class, () -> userService.login(userName, wrongPassword));
+        SnsApplicationException e = assertThrows(SnsApplicationException.class,
+                () -> userService.login(userName, wrongPassword));
         assertEquals(ErrorCode.INVALID_PASSWORD, e.getErrorCode());
     }
 }

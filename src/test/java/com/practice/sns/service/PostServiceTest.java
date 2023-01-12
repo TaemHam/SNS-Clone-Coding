@@ -67,7 +67,8 @@ public class PostServiceTest {
         when(postRepository.saveAndFlush(any())).thenReturn(post);
 
         // When & Then
-        assertDoesNotThrow(() -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(), fixture.getBody()));
+        assertDoesNotThrow(() -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(),
+                fixture.getBody()));
     }
 
     @Test
@@ -91,7 +92,9 @@ public class PostServiceTest {
         when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.empty());
 
         // When & Then
-        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(), fixture.getBody()));
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class,
+                () -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(),
+                        fixture.getBody()));
         assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
     }
 
@@ -107,7 +110,9 @@ public class PostServiceTest {
         when(mockPost.getUser()).thenReturn(mockUser2);
 
         // When & Then
-        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(), fixture.getBody()));
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class,
+                () -> postService.modify(fixture.getUserName(), fixture.getPostId(), fixture.getTitle(),
+                        fixture.getBody()));
         assertEquals(ErrorCode.INVALID_PERMISSION, exception.getErrorCode());
     }
 
@@ -145,7 +150,8 @@ public class PostServiceTest {
         when(userRepository.findByUserName(fixture.getUserName())).thenReturn(Optional.empty());
 
         // When & Then
-        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () -> postService.delete(fixture.getUserName(), fixture.getPostId()));
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class,
+                () -> postService.delete(fixture.getUserName(), fixture.getPostId()));
         assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
     }
 
@@ -162,7 +168,8 @@ public class PostServiceTest {
         when(mockPost.getUser()).thenReturn(mockUser2);
 
         // When & Then
-        SnsApplicationException exception = assertThrows(SnsApplicationException.class, () -> postService.delete(fixture.getUserName(), fixture.getPostId()));
+        SnsApplicationException exception = assertThrows(SnsApplicationException.class,
+                () -> postService.delete(fixture.getUserName(), fixture.getPostId()));
         assertEquals(ErrorCode.INVALID_PERMISSION, exception.getErrorCode());
     }
 }

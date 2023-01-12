@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 public class TestInfoFixture {
-    
+
     public static TestInfo get() {
         return TestInfo.builder()
                 .postId(1L)

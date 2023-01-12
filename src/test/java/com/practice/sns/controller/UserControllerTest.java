@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practice.sns.exception.ErrorCode;
-import com.practice.sns.exception.SnsApplicationException;
+import com.practice.sns.dto.UserDto;
 import com.practice.sns.dto.request.UserJoinRequestDto;
 import com.practice.sns.dto.request.UserLoginRequestDto;
-import com.practice.sns.dto.UserDto;
+import com.practice.sns.exception.ErrorCode;
+import com.practice.sns.exception.SnsApplicationException;
 import com.practice.sns.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,8 @@ public class UserControllerTest {
         // Given
         String userName = "userName";
         String password = "password";
-        when(userService.join(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME));
+        when(userService.join(userName, password)).thenThrow(
+                new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME));
 
         // When & Then
         mockMvc.perform(post("/api/v1/users/join")
