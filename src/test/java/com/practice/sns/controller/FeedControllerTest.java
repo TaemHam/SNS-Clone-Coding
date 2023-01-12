@@ -61,7 +61,7 @@ public class FeedControllerTest {
 
     @Test
     @WithMockUser
-    void 나만의_피드목록요청이_정상적으로_동작함() throws Exception {
+    void 나의_피드목록요청이_정상적으로_동작함() throws Exception {
         // Given
         when(feedService.my(any(), any())).thenReturn(Page.empty());
 
@@ -74,7 +74,7 @@ public class FeedControllerTest {
 
     @Test
     @WithAnonymousUser
-    void 나만의_피드목록요청시_로그인_하지_않은경우_에러반환() throws Exception {
+    void 나의_피드목록요청시_로그인_하지_않은경우_에러반환() throws Exception {
         // Given
         when(feedService.my(any(), any())).thenReturn(Page.empty());
 

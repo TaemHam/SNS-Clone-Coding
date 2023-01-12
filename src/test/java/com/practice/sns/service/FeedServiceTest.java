@@ -45,7 +45,7 @@ public class FeedServiceTest {
     }
 
     @Test
-    void 나만의_피드목록_요청이_성공한_경우() {
+    void 나의_피드목록_요청이_성공한_경우() {
         // Given
         Pageable pageable = mock(Pageable.class);
         TestInfoFixture.TestInfo fixture = TestInfoFixture.get();

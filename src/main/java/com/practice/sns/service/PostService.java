@@ -40,9 +40,6 @@ public class PostService {
         // 포스트를 찾는다
         Post post = postRepository.findById(postId).orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
                 String.format("Post ID %d does not exist", postId)));
-        if (post.getDeletedAt() != null) {
-            throw new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("Post ID %d does not exist", postId));
-        }
 
         // 포스트 작성자를 확인한다
         if (!post.getUser().equals(user)) {
@@ -66,9 +63,6 @@ public class PostService {
         // 포스트를 찾는다
         Post post = postRepository.findById(postId).orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
                 String.format("Post ID %d does not exist", postId)));
-        if (post.getDeletedAt() != null) {
-            throw new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("Post ID %d does not exist", postId));
-        }
 
         // 포스트 작성자를 확인한다
         if (!post.getUser().equals(user)) {
