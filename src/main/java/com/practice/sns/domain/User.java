@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -23,7 +24,9 @@ import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"user\"", indexes = {
+        @Index(columnList = "user_name")
+})
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() where id=?")
 @Where(clause = "deleted_at is NULL")
