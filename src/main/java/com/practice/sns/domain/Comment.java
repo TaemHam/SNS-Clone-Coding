@@ -21,7 +21,9 @@ import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
-@Table(name = "\"comment\"")
+@Table(name = "\"comment\"", indexes = {
+        @Index(columnList = "post_id")
+})
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE \"comment\" SET deleted_at = NOW() where id=?")
 @Where(clause = "deleted_at is NULL")
