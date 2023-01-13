@@ -7,8 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practice.sns.dto.request.PostCommentRequestDto;
-import com.practice.sns.dto.request.PostCreateRequestDto;
+import com.practice.sns.dto.request.CommentRequestDto;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
 import com.practice.sns.service.CommentService;
@@ -44,7 +43,7 @@ public class CommentControllerTest {
         // When & Then
         mockMvc.perform(post("/api/v1/posts/1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new PostCommentRequestDto(comment)))
+                        .content(objectMapper.writeValueAsBytes(new CommentRequestDto(comment)))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -58,7 +57,7 @@ public class CommentControllerTest {
         // When & Then
         mockMvc.perform(post("/api/v1/posts/1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new PostCommentRequestDto(comment)))
+                        .content(objectMapper.writeValueAsBytes(new CommentRequestDto(comment)))
                 ).andDo(print())
                 .andExpect(status().is(ErrorCode.INVALID_PERMISSION.getStatus().value()));
     }
@@ -73,7 +72,7 @@ public class CommentControllerTest {
         // When & Then
         mockMvc.perform(post("/api/v1/posts/1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new PostCommentRequestDto(comment)))
+                        .content(objectMapper.writeValueAsBytes(new CommentRequestDto(comment)))
                 ).andDo(print())
                 .andExpect(status().is(ErrorCode.POST_NOT_FOUND.getStatus().value()));
     }

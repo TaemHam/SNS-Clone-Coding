@@ -3,10 +3,12 @@ package com.practice.sns.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public class PostCommentRequestDto {
+@NoArgsConstructor
+public class CommentRequestDto {
 
     private String comment;
 
