@@ -13,6 +13,7 @@ public class TestInfoFixture {
                 .password("password")
                 .title("title")
                 .body("body")
+                .comment("comment")
                 .build();
     }
 
@@ -25,5 +26,6 @@ public class TestInfoFixture {
         private String password;
         private String title;
         private String body;
+        private String comment;
     }
 }
