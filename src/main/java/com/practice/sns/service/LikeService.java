@@ -1,11 +1,15 @@
 package com.practice.sns.service;
 
 import com.practice.sns.domain.Like;
+import com.practice.sns.domain.Notification;
+import com.practice.sns.domain.NotificationArgs;
 import com.practice.sns.domain.Post;
 import com.practice.sns.domain.User;
+import com.practice.sns.domain.constant.NotificationType;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
 import com.practice.sns.repository.LikeRepository;
+import com.practice.sns.repository.NotificationRepository;
 import com.practice.sns.repository.PostRepository;
 import com.practice.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +22,8 @@ public class LikeService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
     private final LikeRepository likeRepository;
+    private final NotificationRepository notificationRepository;
 
     @Transactional
     public void like(String userName, Long postId) {
@@ -42,6 +46,12 @@ public class LikeService {
 
         // 좋아요를 저장한다
         likeRepository.save(Like.of(user, post));
+
+        // 알림을 발생시킨다
+        notificationRepository.save(
+                Notification.of(post.getUser(), NotificationType.NEW_LIKE_ON_POST,
+                        new NotificationArgs(user.getId(), post.getId())));
+
     }
 
     public int countLike(Long postId) {

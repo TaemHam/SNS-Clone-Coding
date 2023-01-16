@@ -27,6 +27,7 @@ public class PostService {
 
         // 포스트를 저장한다
         postRepository.save(Post.of(title, body, user));
+
     }
 
     @Transactional
@@ -38,12 +39,14 @@ public class PostService {
                         String.format("User Name %s does not exist", userName)));
 
         // 포스트를 찾는다
-        Post post = postRepository.findById(postId).orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
-                String.format("Post ID %d does not exist", postId)));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
+                        String.format("Post ID %d does not exist", postId)));
 
         // 포스트 작성자를 확인한다
         if (!post.getUser().equals(user)) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("User Name %s has no permission to modify Post ID %d", userName, postId));
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,
+                    String.format("User Name %s has no permission to modify Post ID %d", userName, postId));
         }
 
         // 포스트를 저장한다
@@ -61,12 +64,14 @@ public class PostService {
                         String.format("User Name %s does not exist", userName)));
 
         // 포스트를 찾는다
-        Post post = postRepository.findById(postId).orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
-                String.format("Post ID %d does not exist", postId)));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new SnsApplicationException(ErrorCode.POST_NOT_FOUND,
+                        String.format("Post ID %d does not exist", postId)));
 
         // 포스트 작성자를 확인한다
         if (!post.getUser().equals(user)) {
-            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("User Name %s has no permission to modify Post ID %d", userName, postId));
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION,
+                    String.format("User Name %s has no permission to modify Post ID %d", userName, postId));
         }
 
         postRepository.delete(post);
