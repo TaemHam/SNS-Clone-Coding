@@ -1,20 +1,28 @@
 package com.practice.sns.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.practice.sns.dto.UserDto;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.service.NotificationService;
+import com.practice.sns.util.ClassUtils;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,13 +41,19 @@ public class NotificationControllerTest {
     @WithMockUser
     void 알림기능이_정상적으로_동작한다() throws Exception {
         // Given
-        when(notificationService.getList(any(), any())).thenReturn(Page.empty());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // When & Then
-        mockMvc.perform(get("/api/v1/users/notification")
-                        .contentType(MediaType.APPLICATION_JSON)
-                ).andDo(print())
-                .andExpect(status().isOk());
+        try (MockedStatic<ClassUtils> classUtils = mockStatic(ClassUtils.class)) {
+            when(ClassUtils.getCastInstance(authentication.getPrincipal(), UserDto.class))
+                    .thenReturn(Optional.of(mock(UserDto.class)));
+            when(notificationService.getList(any(), any())).thenReturn(Page.empty());
+
+            // When & Then
+            mockMvc.perform(get("/api/v1/users/notification")
+                            .contentType(MediaType.APPLICATION_JSON)
+                    ).andDo(print())
+                    .andExpect(status().isOk());
+        }
     }
 
     @Test
