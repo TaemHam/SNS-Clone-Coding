@@ -12,7 +12,6 @@ import lombok.Getter;
 public class NotificationDto {
 
     private Long id;
-    private UserDto user;
     private NotificationType notificationType;
     private NotificationArgs notificationArgs;
     private Timestamp registeredAt;
@@ -22,7 +21,6 @@ public class NotificationDto {
     public static NotificationDto from(Notification entity) {
         return new NotificationDto(
                 entity.getId(),
-                UserDto.from(entity.getUser()),
                 entity.getNotificationType(),
                 entity.getNotificationArgs(),
                 entity.getRegisteredAt(),
