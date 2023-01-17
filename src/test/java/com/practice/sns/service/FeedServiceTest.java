@@ -8,12 +8,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.practice.sns.domain.Post;
 import com.practice.sns.domain.User;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
 import com.practice.sns.fixture.TestInfoFixture;
-import com.practice.sns.fixture.UserEntityFixture;
 import com.practice.sns.repository.PostRepository;
 import com.practice.sns.repository.UserRepository;
 import java.util.Optional;
@@ -67,7 +65,7 @@ public class FeedServiceTest {
 
         // When & Then
         SnsApplicationException e = assertThrows(SnsApplicationException.class,
-                () -> feedService.list(pageable));
+                () -> feedService.my(pageable, fixture.getUserName()));
         assertEquals(ErrorCode.USER_NOT_FOUND, e.getErrorCode());
     }
 }
