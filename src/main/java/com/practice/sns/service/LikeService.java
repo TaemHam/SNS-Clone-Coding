@@ -54,7 +54,7 @@ public class LikeService {
 
     }
 
-    public int countLike(Long postId) {
+    public long countLike(Long postId) {
 
         // 포스트를 찾는다
         Post post = postRepository.findById(postId)
