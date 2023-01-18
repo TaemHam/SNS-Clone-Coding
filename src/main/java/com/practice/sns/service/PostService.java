@@ -5,6 +5,8 @@ import com.practice.sns.domain.User;
 import com.practice.sns.dto.PostDto;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
+import com.practice.sns.repository.CommentRepository;
+import com.practice.sns.repository.LikeRepository;
 import com.practice.sns.repository.PostRepository;
 import com.practice.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -75,5 +79,8 @@ public class PostService {
         }
 
         postRepository.delete(post);
+        commentRepository.deleteAllByPost(post);
+        likeRepository.deleteAllByPost(post);
+
     }
 }

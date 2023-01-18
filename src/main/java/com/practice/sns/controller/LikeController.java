@@ -24,7 +24,7 @@ public class LikeController {
     }
 
     @GetMapping()
-    public Response<Integer> countLike(@PathVariable Long postId) {
+    public Response<Long> countLike(@PathVariable Long postId) {
         return Response.success(likeService.countLike(postId));
     }
 }
