@@ -17,7 +17,8 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "User has invalid permission"),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Database error has occurred"),
-    ALREADY_LIKED(HttpStatus.CONFLICT, "User already liked the post");
+    ALREADY_LIKED(HttpStatus.CONFLICT, "User already liked the post"),
+    NOTIFICATION_CONNECTION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An Error has occurred while connecting to notification");
 
     private final HttpStatus status;
     private final String message;

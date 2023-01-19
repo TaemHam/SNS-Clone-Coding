@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/v1/users/notification")
@@ -31,5 +32,13 @@ public class NotificationController {
 
         return Response.success(
                 notificationService.getList(userDto.getId(), pageable).map(NotificationResponseDto::from));
+    }
+
+    @GetMapping("/subscribe")
+    public SseEmitter subscribe(Authentication authentication) {
+        UserDto userDto = ClassUtils.getCastInstance(authentication.getPrincipal(), UserDto.class)
+                .orElseThrow(() -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,
+                        "Casting to UserDto class failed"));
+        return notificationService.connectNotification(userDto.getId());
     }
 }

@@ -24,6 +24,7 @@ public class LikeService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public void like(String userName, Long postId) {
@@ -48,9 +49,10 @@ public class LikeService {
         likeRepository.save(Like.of(user, post));
 
         // 알림을 발생시킨다
-        notificationRepository.save(
+        Notification notification = notificationRepository.save(
                 Notification.of(post.getUser(), NotificationType.NEW_LIKE_ON_POST,
                         new NotificationArgs(user.getId(), post.getId())));
+        notificationService.send(notification.getId(), post.getUser().getId());
 
     }
 
