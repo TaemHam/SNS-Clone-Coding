@@ -19,6 +19,9 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
+  redis:
+    url: redis://svc.gksl2.cloudtype.app:32434
+
 jwt:
   secret-key: sns-clone-coding-project.secret_key
   # TODO: Refresh Token 구현
