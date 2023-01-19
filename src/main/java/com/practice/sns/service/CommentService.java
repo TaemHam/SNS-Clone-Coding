@@ -27,6 +27,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public void comment(String userName, Long postId, String body) {
@@ -44,10 +45,10 @@ public class CommentService {
         commentRepository.save(Comment.of(body, user, post));
 
         // 알람을 발생시킨다
-        notificationRepository.save(
+        Notification notification = notificationRepository.save(
                 Notification.of(post.getUser(), NotificationType.NEW_COMMENT_ON_POST,
                         new NotificationArgs(user.getId(), post.getId())));
-
+        notificationService.send(notification.getId(), post.getUser().getId());
     }
 
     @Transactional
