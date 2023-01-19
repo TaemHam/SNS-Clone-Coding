@@ -11,6 +11,7 @@ import com.practice.sns.domain.User;
 import com.practice.sns.exception.ErrorCode;
 import com.practice.sns.exception.SnsApplicationException;
 import com.practice.sns.fixture.UserEntityFixture;
+import com.practice.sns.repository.UserCacheRepository;
 import com.practice.sns.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,10 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepository userRepository;
+
+    @MockBean
+    private UserCacheRepository userCacheRepository;
+
 
     @MockBean
     private BCryptPasswordEncoder encoder;
